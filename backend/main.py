@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from parser import extract_text_from_pdf
 from preprocessor import preprocess_text
+from matcher import score_resumes
 
 # Create the FastAPI app
 app = FastAPI(title="AI Resume Screener")
@@ -21,7 +22,7 @@ app.add_middleware(
 def home():
     return {"message": "AI Resume Screener API is running!"}
 
-# Upload route - receives resumes + job description
+# Main route - full AI pipeline
 @app.post("/screen")
 async def screen_resumes(
     job_description: str = Form(...),
@@ -30,26 +31,23 @@ async def screen_resumes(
     # Step 1: Clean the job description
     cleaned_job_desc = preprocess_text(job_description)
 
-    results = []
-
+    # Step 2: Process each resume
+    processed_resumes = []
     for resume in resumes:
-        # Step 2: Read the PDF
         file_bytes = await resume.read()
-        
-        # Step 3: Extract text from PDF
         raw_text = extract_text_from_pdf(file_bytes)
-        
-        # Step 4: Clean the resume text
         cleaned_text = preprocess_text(raw_text)
-
-        results.append({
+        processed_resumes.append({
             "filename": resume.filename,
-            "raw_preview": raw_text[:200],        # Original text
-            "cleaned_preview": cleaned_text[:200]  # Cleaned text
+            "raw_text": raw_text,
+            "cleaned_text": cleaned_text
         })
 
+    # Step 3: Score all resumes against job description
+    results = score_resumes(cleaned_job_desc, processed_resumes)
+
     return {
-        "message": "Resumes preprocessed successfully!",
-        "cleaned_job_description": cleaned_job_desc,
-        "resumes": results
+        "message": "Screening complete!",
+        "total_resumes": len(results),
+        "results": results
     }
