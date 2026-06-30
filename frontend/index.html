@@ -5,78 +5,235 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Screener</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #f5f5f5;
+            font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f9;
+            min-height: 100vh;
+            padding: 40px 20px;
         }
-        h1 { color: #2c3e50; text-align: center; }
-        .form-group { margin: 20px 0; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 36px; }
+        header h1 {
+            font-size: 32px; color: #1a2238; font-weight: 700;
+        }
+        header p { color: #6b7280; margin-top: 6px; font-size: 15px; }
+
+        .card {
+            background: #fff; border-radius: 14px;
+            padding: 28px; margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        label {
+            font-weight: 600; display: block;
+            margin-bottom: 8px; color: #1a2238; font-size: 14px;
+        }
         textarea {
-            width: 100%; height: 150px;
-            padding: 10px; border-radius: 5px;
-            border: 1px solid #ccc;
+            width: 100%; height: 130px; padding: 12px;
+            border-radius: 8px; border: 1.5px solid #e2e5ea;
+            font-size: 14px; resize: vertical; font-family: inherit;
         }
-        input[type="file"] { padding: 10px; }
-        button {
-            background: #2c3e50; color: white;
-            padding: 12px 30px; border: none;
-            border-radius: 5px; cursor: pointer;
-            font-size: 16px; width: 100%;
+        textarea:focus { outline: none; border-color: #4f63d2; }
+
+        .upload-box {
+            border: 2px dashed #d1d5db; border-radius: 10px;
+            padding: 24px; text-align: center; margin-top: 8px;
+            background: #fafbfc; cursor: pointer;
         }
-        button:hover { background: #34495e; }
-        #results { margin-top: 30px; }
+        .upload-box:hover { border-color: #4f63d2; }
+        input[type="file"] { display: none; }
+        .file-label { color: #4f63d2; font-weight: 600; cursor: pointer; }
+        #fileList { margin-top: 10px; font-size: 13px; color: #6b7280; }
+
+        button.submit-btn {
+            background: #1a2238; color: white;
+            padding: 14px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 15px; font-weight: 600;
+            width: 100%; margin-top: 20px; transition: background 0.2s;
+        }
+        button.submit-btn:hover { background: #2c3759; }
+        button.submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+        #results { margin-top: 10px; }
+        .results-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 16px;
+        }
+        .results-header h2 { font-size: 20px; color: #1a2238; }
+        .results-header span { color: #6b7280; font-size: 14px; }
+
+        .resume-card {
+            background: #fff; border-radius: 12px;
+            padding: 20px; margin-bottom: 14px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #d1d5db;
+        }
+        .resume-card.high { border-left-color: #16a34a; }
+        .resume-card.medium { border-left-color: #d97706; }
+        .resume-card.low { border-left-color: #dc2626; }
+
+        .resume-top {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 10px;
+        }
+        .rank-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #1a2238; color: white; font-weight: 700;
+            font-size: 13px; margin-right: 10px;
+        }
+        .filename { font-weight: 600; color: #1a2238; font-size: 15px; }
+        .score-text { font-weight: 700; font-size: 18px; }
+        .score-text.high { color: #16a34a; }
+        .score-text.medium { color: #d97706; }
+        .score-text.low { color: #dc2626; }
+
+        .progress-bar-bg {
+            background: #eef0f3; border-radius: 6px;
+            height: 10px; overflow: hidden; margin-top: 10px;
+        }
+        .progress-bar-fill {
+            height: 100%; border-radius: 6px;
+            transition: width 0.6s ease;
+        }
+        .progress-bar-fill.high { background: #16a34a; }
+        .progress-bar-fill.medium { background: #d97706; }
+        .progress-bar-fill.low { background: #dc2626; }
+
+        .preview-text {
+            margin-top: 12px; font-size: 13px; color: #6b7280;
+            background: #f9fafb; padding: 10px; border-radius: 6px;
+            line-height: 1.5;
+        }
+
+        .spinner {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; padding: 30px; color: #6b7280;
+        }
+        .spinner-circle {
+            width: 18px; height: 18px; border: 3px solid #e2e5ea;
+            border-top: 3px solid #4f63d2; border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <h1>🤖 AI Resume Screener</h1>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Resume Screener</h1>
+            <p>Upload resumes and instantly rank candidates against your job description</p>
+        </header>
 
-    <div class="form-group">
-        <label>Job Description:</label>
-        <textarea id="jobDesc" 
-            placeholder="Paste the job description here..."></textarea>
+        <div class="card">
+            <label>Job Description</label>
+            <textarea id="jobDesc" placeholder="Paste the job description here..."></textarea>
+
+            <label style="margin-top: 20px;">Upload Resumes (PDF)</label>
+            <div class="upload-box" onclick="document.getElementById('resumes').click()">
+                <span class="file-label">📁 Click to choose PDF files</span>
+                <input type="file" id="resumes" multiple accept=".pdf" onchange="updateFileList()">
+                <div id="fileList">No files selected</div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="screenResumes()">
+                Screen Resumes
+            </button>
+        </div>
+
+        <div id="results"></div>
     </div>
-
-    <div class="form-group">
-        <label>Upload Resumes (PDF):</label>
-        <input type="file" id="resumes" multiple accept=".pdf">
-    </div>
-
-    <button onclick="screenResumes()">Screen Resumes</button>
-
-    <div id="results"></div>
 
     <script>
+        function updateFileList() {
+            const files = document.getElementById('resumes').files;
+            const fileList = document.getElementById('fileList');
+            if (files.length === 0) {
+                fileList.textContent = 'No files selected';
+            } else {
+                const names = Array.from(files).map(f => f.name).join(', ');
+                fileList.textContent = `${files.length} file(s): ${names}`;
+            }
+        }
+
+        function getScoreCategory(score) {
+            if (score >= 60) return 'high';
+            if (score >= 30) return 'medium';
+            return 'low';
+        }
+
         async function screenResumes() {
             const jobDesc = document.getElementById('jobDesc').value;
             const resumes = document.getElementById('resumes').files;
+            const btn = document.getElementById('submitBtn');
+            const resultsDiv = document.getElementById('results');
 
             if (!jobDesc || resumes.length === 0) {
                 alert('Please fill in the job description and upload at least one resume!');
                 return;
             }
 
-            // Build the form data to send to backend
             const formData = new FormData();
             formData.append('job_description', jobDesc);
             for (let resume of resumes) {
                 formData.append('resumes', resume);
             }
 
-            document.getElementById('results').innerHTML = '<p>⏳ Screening resumes...</p>';
+            btn.disabled = true;
+            btn.textContent = 'Screening...';
+            resultsDiv.innerHTML = `
+                <div class="card">
+                    <div class="spinner">
+                        <div class="spinner-circle"></div>
+                        <span>Analyzing resumes against job description...</span>
+                    </div>
+                </div>
+            `;
 
-            // Send to backend
-            const response = await fetch('http://127.0.0.1:8000/screen', {
-                method: 'POST',
-                body: formData
+            try {
+                const response = await fetch('http://127.0.0.1:8000/screen', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                renderResults(data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="card"><p style="color:#dc2626;">Error: Could not connect to server. Make sure the backend is running.</p></div>`;
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Screen Resumes';
+        }
+
+        function renderResults(data) {
+            const resultsDiv = document.getElementById('results');
+            let html = `
+                <div class="results-header">
+                    <h2>🏆 Candidate Rankings</h2>
+                    <span>${data.total_resumes} resume(s) analyzed</span>
+                </div>
+            `;
+
+            data.results.forEach((resume, index) => {
+                const category = getScoreCategory(resume.score);
+                html += `
+                    <div class="resume-card ${category}">
+                        <div class="resume-top">
+                            <div style="display:flex; align-items:center;">
+                                <span class="rank-badge">#${index + 1}</span>
+                                <span class="filename">${resume.filename}</span>
+                            </div>
+                            <span class="score-text ${category}">${resume.score}%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill ${category}" style="width: ${resume.score}%;"></div>
+                        </div>
+                        <div class="preview-text">${resume.raw_preview}...</div>
+                    </div>
+                `;
             });
 
-            const data = await response.json();
-            document.getElementById('results').innerHTML = 
-                '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            resultsDiv.innerHTML = html;
         }
     </script>
 </body>
