@@ -70,6 +70,7 @@ Open `frontend/index.html` in your browser.
 ---
 
 ## 📁 Project Structure
+```bash
 ai-resume-screener/
 ├── backend/
 │   ├── main.py          # FastAPI server & routes
@@ -79,7 +80,7 @@ ai-resume-screener/
 ├── frontend/
 │   └── index.html       # Dashboard UI
 └── README.md
----
+```
 
 ## 🧠 How the AI Works
 
