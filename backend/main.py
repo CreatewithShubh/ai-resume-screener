@@ -1,11 +1,16 @@
-# main.py - The heart of our web server
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from parser import extract_text_from_pdf
 from preprocessor import preprocess_text
 from matcher import score_resumes
+import nltk
 
+# Download NLTK data automatically on server startup
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('punkt_tab')
 # Create the FastAPI app
 app = FastAPI(title="AI Resume Screener")
 
