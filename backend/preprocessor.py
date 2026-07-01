@@ -4,6 +4,17 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+import os
+import nltk
+
+# Tell NLTK where to save data on the server
+nltk.data.path.append('/opt/render/project/src/nltk_data')
+
+# Download required data
+nltk.download('punkt', download_dir='/opt/render/project/src/nltk_data')
+nltk.download('stopwords', download_dir='/opt/render/project/src/nltk_data')
+nltk.download('wordnet', download_dir='/opt/render/project/src/nltk_data')
+nltk.download('punkt_tab', download_dir='/opt/render/project/src/nltk_data')
 
 # Load the lemmatizer and stop words
 lemmatizer = WordNetLemmatizer()
