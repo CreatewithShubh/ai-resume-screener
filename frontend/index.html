@@ -120,6 +120,21 @@
         .badge.matched { background: #dcfce7; color: #16a34a; }
         .badge.missing { background: #fee2e2; color: #dc2626; }
 
+        .summary-box {
+            margin-top: 12px; background: #f0f4ff;
+            border-radius: 8px; padding: 10px 14px;
+            border-left: 3px solid #4f63d2;
+        }
+        .summary-label {
+            font-size: 12px; font-weight: 700;
+            color: #4f63d2; display: block;
+            margin-bottom: 4px;
+        }
+        .summary-text {
+            font-size: 13px; color: #374151;
+            line-height: 1.6;
+        }
+
         .preview-text {
             margin-top: 12px; font-size: 13px; color: #6b7280;
             background: #f9fafb; padding: 10px; border-radius: 6px;
@@ -261,6 +276,10 @@
                                     ${resume.missing_skills.map(s => `<span class="badge missing">${s}</span>`).join('')}
                                 </div>
                             ` : ''}
+                        </div>
+                        <div class="summary-box">
+                            <span class="summary-label">🤖 AI Summary:</span>
+                            <p class="summary-text">${resume.summary}</p>
                         </div>
                         <div class="preview-text">${resume.raw_preview}...</div>
                     </div>

@@ -63,7 +63,8 @@ def score_resumes(job_description: str, resumes: list) -> list:
             "score": score,
             "matched_skills": matched_skills,
             "missing_skills": missing_skills,
-            "raw_preview": resume['raw_text'][:200]
+            "raw_preview": resume['raw_text'][:200],
+            "summary": resume.get('summary', 'No summary available.')
         })
 
     results.sort(key=lambda x: x['score'], reverse=True)
