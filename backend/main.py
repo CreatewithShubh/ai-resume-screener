@@ -49,3 +49,7 @@ async def screen_resumes(
         cleaned_text = preprocess_text(raw_text)
         
         # Generate AI summary
+        try:
+            summary = summarize_resume(raw_text)
+        except:
+            summary = "Summary not available."
