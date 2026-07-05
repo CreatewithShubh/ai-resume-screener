@@ -226,14 +226,22 @@
             `;
 
             try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 60000);
                 const response = await fetch('https://ai-resume-screener-o0gp.onrender.com/screen', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    signal: controller.signal
                 });
+                clearTimeout(timeout);
                 const data = await response.json();
                 renderResults(data);
             } catch (error) {
-                resultsDiv.innerHTML = `<div class="card"><p style="color:#dc2626;">Error: Could not connect to server. Make sure the backend is running.</p></div>`;
+                if (error.name === 'AbortError') {
+                    resultsDiv.innerHTML = `<div class="card"><p style="color:#dc2626;">Request timed out. Please try again!</p></div>`;
+                } else {
+                    resultsDiv.innerHTML = `<div class="card"><p style="color:#dc2626;">Error: ${error.message}</p></div>`;
+                }
             }
 
             btn.disabled = false;
