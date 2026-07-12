@@ -8,64 +8,76 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
-            background: #f4f6f9;
+            background: linear-gradient(135deg, #1a2238 0%, #2d3561 100%);
             min-height: 100vh;
             padding: 40px 20px;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 860px; margin: 0 auto; }
+        
         header { text-align: center; margin-bottom: 36px; }
         header h1 {
-            font-size: 32px; color: #1a2238; font-weight: 700;
+            font-size: 36px; color: #ffffff; font-weight: 800;
+            letter-spacing: -0.5px;
         }
-        header p { color: #6b7280; margin-top: 6px; font-size: 15px; }
+        header p { color: #a0aec0; margin-top: 8px; font-size: 15px; }
 
         .card {
-            background: #fff; border-radius: 14px;
-            padding: 28px; margin-bottom: 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            background: #ffffff; border-radius: 20px;
+            padding: 32px; margin-bottom: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        label {
-            font-weight: 600; display: block;
-            margin-bottom: 8px; color: #1a2238; font-size: 14px;
+
+        .section-title {
+            font-weight: 700; display: block;
+            margin-bottom: 10px; color: #1a2238; font-size: 14px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
         textarea {
-            width: 100%; height: 130px; padding: 12px;
-            border-radius: 8px; border: 1.5px solid #e2e5ea;
+            width: 100%; height: 140px; padding: 14px;
+            border-radius: 10px; border: 2px solid #e8ecf0;
             font-size: 14px; resize: vertical; font-family: inherit;
+            color: #374151; transition: border 0.2s;
         }
         textarea:focus { outline: none; border-color: #4f63d2; }
 
         .upload-box {
-            border: 2px dashed #d1d5db; border-radius: 10px;
-            padding: 24px; text-align: center; margin-top: 8px;
-            background: #fafbfc; cursor: pointer;
+            border: 2px dashed #c8d0e0; border-radius: 12px;
+            padding: 28px; text-align: center; margin-top: 8px;
+            background: #f8faff; cursor: pointer; transition: all 0.2s;
         }
-        .upload-box:hover { border-color: #4f63d2; }
+        .upload-box:hover { border-color: #4f63d2; background: #f0f4ff; }
         input[type="file"] { display: none; }
-        .file-label { color: #4f63d2; font-weight: 600; cursor: pointer; }
-        #fileList { margin-top: 10px; font-size: 13px; color: #6b7280; }
+        .upload-icon { font-size: 32px; margin-bottom: 8px; }
+        .file-label { color: #4f63d2; font-weight: 700; font-size: 15px; }
+        .file-hint { color: #9ca3af; font-size: 13px; margin-top: 4px; }
+        #fileList { margin-top: 10px; font-size: 13px; color: #4f63d2; font-weight: 600; }
 
         button.submit-btn {
-            background: #1a2238; color: white;
-            padding: 14px; border: none; border-radius: 8px;
-            cursor: pointer; font-size: 15px; font-weight: 600;
-            width: 100%; margin-top: 20px; transition: background 0.2s;
+            background: linear-gradient(135deg, #4f63d2, #1a2238);
+            color: white; padding: 16px; border: none; border-radius: 12px;
+            cursor: pointer; font-size: 16px; font-weight: 700;
+            width: 100%; margin-top: 24px; transition: all 0.2s;
+            letter-spacing: 0.3px;
         }
-        button.submit-btn:hover { background: #2c3759; }
-        button.submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        button.submit-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(79,99,210,0.4); }
+        button.submit-btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; box-shadow: none; }
 
         #results { margin-top: 10px; }
         .results-header {
             display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 16px;
+            align-items: center; margin-bottom: 16px; padding: 0 4px;
         }
-        .results-header h2 { font-size: 20px; color: #1a2238; }
-        .results-header span { color: #6b7280; font-size: 14px; }
+        .results-header h2 { font-size: 22px; color: #ffffff; font-weight: 700; }
+        .results-header span {
+            color: #a0aec0; font-size: 14px;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 12px; border-radius: 20px;
+        }
 
         .resume-card {
-            background: #fff; border-radius: 12px;
-            padding: 20px; margin-bottom: 14px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            background: #ffffff; border-radius: 16px;
+            padding: 24px; margin-bottom: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
             border-left: 5px solid #d1d5db;
             animation: fadeIn 0.4s ease;
         }
@@ -74,105 +86,115 @@
         .resume-card.low { border-left-color: #dc2626; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .resume-top {
             display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 10px;
+            align-items: center; margin-bottom: 14px;
         }
+        .left-info { display: flex; align-items: center; gap: 12px; }
         .rank-badge {
             display: inline-flex; align-items: center; justify-content: center;
-            width: 28px; height: 28px; border-radius: 50%;
-            background: #1a2238; color: white; font-weight: 700;
-            font-size: 13px; margin-right: 10px;
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #1a2238; color: white; font-weight: 800;
+            font-size: 13px;
         }
-        .filename { font-weight: 600; color: #1a2238; font-size: 15px; }
-        .score-text { font-weight: 700; font-size: 18px; }
+        .rank-badge.gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .rank-badge.silver { background: linear-gradient(135deg, #9ca3af, #6b7280); }
+        .rank-badge.bronze { background: linear-gradient(135deg, #b45309, #92400e); }
+
+        .filename { font-weight: 700; color: #1a2238; font-size: 15px; }
+        .score-text { font-weight: 800; font-size: 22px; }
         .score-text.high { color: #16a34a; }
         .score-text.medium { color: #d97706; }
         .score-text.low { color: #dc2626; }
 
         .progress-bar-bg {
-            background: #eef0f3; border-radius: 6px;
-            height: 10px; overflow: hidden; margin-top: 10px;
+            background: #f0f2f5; border-radius: 8px;
+            height: 8px; overflow: hidden;
         }
         .progress-bar-fill {
-            height: 100%; border-radius: 6px;
-            transition: width 0.6s ease;
+            height: 100%; border-radius: 8px;
+            transition: width 0.8s ease;
         }
-        .progress-bar-fill.high { background: #16a34a; }
-        .progress-bar-fill.medium { background: #d97706; }
-        .progress-bar-fill.low { background: #dc2626; }
+        .progress-bar-fill.high { background: linear-gradient(90deg, #16a34a, #4ade80); }
+        .progress-bar-fill.medium { background: linear-gradient(90deg, #d97706, #fbbf24); }
+        .progress-bar-fill.low { background: linear-gradient(90deg, #dc2626, #f87171); }
 
-        .skills-section { margin-top: 12px; }
-        .skill-group { margin-bottom: 8px; }
-        .skill-label {
-            font-size: 12px; font-weight: 600; color: #6b7280;
-            margin-right: 8px;
+        .divider { border: none; border-top: 1px solid #f0f2f5; margin: 14px 0; }
+
+        .skills-section { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 4px; }
+        .skill-group { flex: 1; min-width: 200px; }
+        .skill-group-title {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; margin-bottom: 6px;
         }
+        .skill-group-title.matched { color: #16a34a; }
+        .skill-group-title.missing { color: #dc2626; }
+        .badges { display: flex; flex-wrap: wrap; gap: 4px; }
         .badge {
-            display: inline-block; padding: 3px 10px;
+            display: inline-block; padding: 4px 10px;
             border-radius: 20px; font-size: 12px; font-weight: 600;
-            margin: 2px 3px;
         }
         .badge.matched { background: #dcfce7; color: #16a34a; }
         .badge.missing { background: #fee2e2; color: #dc2626; }
 
         .summary-box {
-            margin-top: 12px; background: #f0f4ff;
-            border-radius: 8px; padding: 10px 14px;
+            margin-top: 14px; background: #f8faff;
+            border-radius: 10px; padding: 12px 16px;
             border-left: 3px solid #4f63d2;
         }
         .summary-label {
-            font-size: 12px; font-weight: 700;
-            color: #4f63d2; display: block;
-            margin-bottom: 4px;
+            font-size: 11px; font-weight: 700; color: #4f63d2;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            display: block; margin-bottom: 5px;
         }
-        .summary-text {
-            font-size: 13px; color: #374151;
-            line-height: 1.6;
-        }
-
-        .preview-text {
-            margin-top: 12px; font-size: 13px; color: #6b7280;
-            background: #f9fafb; padding: 10px; border-radius: 6px;
-            line-height: 1.5;
-        }
+        .summary-text { font-size: 13px; color: #374151; line-height: 1.6; }
 
         .spinner {
-            display: flex; align-items: center; justify-content: center;
-            gap: 10px; padding: 30px; color: #6b7280;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 16px; padding: 40px; color: #ffffff;
         }
         .spinner-circle {
-            width: 18px; height: 18px; border: 3px solid #e2e5ea;
-            border-top: 3px solid #4f63d2; border-radius: 50%;
+            width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.2);
+            border-top: 4px solid #ffffff; border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
+        .spinner p { font-size: 15px; color: #a0aec0; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-box {
+            background: #fff5f5; border: 1px solid #fed7d7;
+            border-radius: 12px; padding: 20px; color: #c53030;
+            text-align: center; font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🤖 AI Resume Screener</h1>
-            <p>Upload resumes and instantly rank candidates against your job description</p>
+            <p>Instantly rank candidates against your job description using AI</p>
         </header>
 
         <div class="card">
-            <label>Job Description</label>
+            <span class="section-title">Job Description</span>
             <textarea id="jobDesc" placeholder="Paste the job description here..."></textarea>
 
-            <label style="margin-top: 20px;">Upload Resumes (PDF)</label>
+            <span class="section-title" style="margin-top: 24px; display: block;">Upload Resumes (PDF)</span>
             <div class="upload-box" onclick="document.getElementById('resumes').click()">
-                <span class="file-label">📁 Click to choose PDF files</span>
+                <div class="upload-icon">📄</div>
+                <div class="file-label">Click to choose PDF files</div>
+                <div class="file-hint">You can upload multiple resumes at once</div>
                 <input type="file" id="resumes" multiple accept=".pdf" onchange="updateFileList()">
-                <div id="fileList">No files selected</div>
+                <div id="fileList"></div>
             </div>
 
             <button class="submit-btn" id="submitBtn" onclick="screenResumes()">
-                Screen Resumes
+                ⚡ Screen Resumes
             </button>
         </div>
 
@@ -184,10 +206,9 @@
             const files = document.getElementById('resumes').files;
             const fileList = document.getElementById('fileList');
             if (files.length === 0) {
-                fileList.textContent = 'No files selected';
+                fileList.textContent = '';
             } else {
-                const names = Array.from(files).map(f => f.name).join(', ');
-                fileList.textContent = `${files.length} file(s): ${names}`;
+                fileList.textContent = `✅ ${files.length} file(s) selected`;
             }
         }
 
@@ -195,6 +216,13 @@
             if (score >= 60) return 'high';
             if (score >= 30) return 'medium';
             return 'low';
+        }
+
+        function getRankClass(index) {
+            if (index === 0) return 'gold';
+            if (index === 1) return 'silver';
+            if (index === 2) return 'bronze';
+            return '';
         }
 
         async function screenResumes() {
@@ -215,13 +243,11 @@
             }
 
             btn.disabled = true;
-            btn.textContent = 'Screening...';
+            btn.textContent = '⏳ Analyzing...';
             resultsDiv.innerHTML = `
-                <div class="card">
-                    <div class="spinner">
-                        <div class="spinner-circle"></div>
-                        <span>Analyzing resumes against job description...</span>
-                    </div>
+                <div class="spinner">
+                    <div class="spinner-circle"></div>
+                    <p>AI is analyzing your resumes...</p>
                 </div>
             `;
 
@@ -235,17 +261,21 @@
                 });
                 clearTimeout(timeout);
                 const data = await response.json();
-                renderResults(data);
+                if (data && data.results) {
+                    renderResults(data);
+                } else {
+                    resultsDiv.innerHTML = `<div class="error-box">⚠️ Something went wrong. Please try again!</div>`;
+                }
             } catch (error) {
                 if (error.name === 'AbortError') {
-                    resultsDiv.innerHTML = `<div class="card"><p style="color:#dc2626;">Request timed out. Please try again!</p></div>`;
+                    resultsDiv.innerHTML = `<div class="error-box">⏱️ Request timed out. Please try again!</div>`;
                 } else {
-                    resultsDiv.innerHTML = `<div class="card"><p style="color:#dc2626;">Error: ${error.message}</p></div>`;
+                    resultsDiv.innerHTML = `<div class="error-box">❌ Error: ${error.message}</div>`;
                 }
             }
 
             btn.disabled = false;
-            btn.textContent = 'Screen Resumes';
+            btn.textContent = '⚡ Screen Resumes';
         }
 
         function renderResults(data) {
@@ -259,11 +289,12 @@
 
             data.results.forEach((resume, index) => {
                 const category = getScoreCategory(resume.score);
+                const rankClass = getRankClass(index);
                 html += `
                     <div class="resume-card ${category}">
                         <div class="resume-top">
-                            <div style="display:flex; align-items:center;">
-                                <span class="rank-badge">#${index + 1}</span>
+                            <div class="left-info">
+                                <span class="rank-badge ${rankClass}">#${index + 1}</span>
                                 <span class="filename">${resume.filename}</span>
                             </div>
                             <span class="score-text ${category}">${resume.score}%</span>
@@ -271,25 +302,31 @@
                         <div class="progress-bar-bg">
                             <div class="progress-bar-fill ${category}" style="width: ${resume.score}%;"></div>
                         </div>
+                        <hr class="divider">
                         <div class="skills-section">
-                            ${resume.matched_skills.length > 0 ? `
+                            ${resume.matched_skills && resume.matched_skills.length > 0 ? `
                                 <div class="skill-group">
-                                    <span class="skill-label">✓ Matched skills:</span>
-                                    ${resume.matched_skills.map(s => `<span class="badge matched">${s}</span>`).join('')}
+                                    <div class="skill-group-title matched">✓ Matched Skills</div>
+                                    <div class="badges">
+                                        ${resume.matched_skills.map(s => `<span class="badge matched">${s}</span>`).join('')}
+                                    </div>
                                 </div>
                             ` : ''}
-                            ${resume.missing_skills.length > 0 ? `
+                            ${resume.missing_skills && resume.missing_skills.length > 0 ? `
                                 <div class="skill-group">
-                                    <span class="skill-label">✗ Missing skills:</span>
-                                    ${resume.missing_skills.map(s => `<span class="badge missing">${s}</span>`).join('')}
+                                    <div class="skill-group-title missing">✗ Missing Skills</div>
+                                    <div class="badges">
+                                        ${resume.missing_skills.map(s => `<span class="badge missing">${s}</span>`).join('')}
+                                    </div>
                                 </div>
                             ` : ''}
                         </div>
+                        ${resume.summary ? `
                         <div class="summary-box">
-                            <span class="summary-label">🤖 AI Summary:</span>
+                            <span class="summary-label">🤖 AI Summary</span>
                             <p class="summary-text">${resume.summary}</p>
                         </div>
-                        <div class="preview-text">${resume.raw_preview}...</div>
+                        ` : ''}
                     </div>
                 `;
             });
