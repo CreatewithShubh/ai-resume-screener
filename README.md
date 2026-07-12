@@ -1,8 +1,9 @@
 # 🤖 AI Resume Screener
 
-An intelligent resume screening system that automatically ranks candidates based on how well their resumes match a job description.
+An intelligent resume screening system that automatically ranks candidates based on how well their resumes match a job description using AI and Machine Learning.
 
-Built with Python, FastAPI, and Machine Learning (TF-IDF + Cosine Similarity).
+🔗 **Live Demo:** [Click here to try it](https://createwithshubh.github.io/ai-resume-screener/frontend/)
+⚙️ **API:** [https://ai-resume-screener-o0gp.onrender.com](https://ai-resume-screener-o0gp.onrender.com)
 
 ---
 
@@ -12,7 +13,8 @@ Built with Python, FastAPI, and Machine Learning (TF-IDF + Cosine Similarity).
 - Paste a job description
 - AI ranks candidates by match score
 - Shows matched and missing skills for each candidate
-- Clean, professional dashboard UI
+- Generates an AI summary for each resume
+- Clean, professional dark mode dashboard UI
 
 ---
 
@@ -30,7 +32,9 @@ Built with Python, FastAPI, and Machine Learning (TF-IDF + Cosine Similarity).
 | ML | TF-IDF, Cosine Similarity, scikit-learn |
 | NLP | NLTK (tokenization, lemmatization, stopwords) |
 | PDF Parsing | PyMuPDF |
+| Summarization | Extractive Summarization (TF-IDF based) |
 | Frontend | HTML, CSS, JavaScript |
+| Deployment | Render (backend), GitHub Pages (frontend) |
 
 ---
 
@@ -50,7 +54,7 @@ venv\Scripts\activate
 
 ### 3. Install dependencies
 ```bash
-pip install fastapi uvicorn python-multipart PyMuPDF nltk scikit-learn pandas numpy spacy
+pip install -r backend/requirements.txt
 ```
 
 ### 4. Download NLTK data
@@ -70,17 +74,23 @@ Open `frontend/index.html` in your browser.
 ---
 
 ## 📁 Project Structure
+
 ```bash
 ai-resume-screener/
 ├── backend/
-│   ├── main.py          # FastAPI server & routes
-│   ├── parser.py        # PDF text extraction
-│   ├── preprocessor.py  # Text cleaning & NLP
-│   └── matcher.py       # TF-IDF scoring & skill matching
+│   ├── main.py           # FastAPI server & routes
+│   ├── parser.py         # PDF text extraction
+│   ├── preprocessor.py   # Text cleaning & NLP
+│   ├── matcher.py        # TF-IDF scoring & skill matching
+│   ├── summarizer.py     # AI resume summarization
+│   └── requirements.txt  # Python dependencies
 ├── frontend/
-│   └── index.html       # Dashboard UI
+│   └── index.html        # Dark mode dashboard UI
+├── demo.png              # App screenshot
 └── README.md
 ```
+
+---
 
 ## 🧠 How the AI Works
 
@@ -88,8 +98,9 @@ ai-resume-screener/
 2. **Text Preprocessing** — Cleans text (lowercase, remove stopwords, lemmatize)
 3. **TF-IDF Vectorization** — Converts text into numerical vectors
 4. **Cosine Similarity** — Measures how similar each resume is to the job description
-5. **Skill Matching** — Identifies matched and missing skills
-6. **Ranking** — Sorts candidates from highest to lowest match score
+5. **Skill Matching** — Identifies matched and missing skills from a curated skill list
+6. **Extractive Summarization** — Picks the most important sentences from each resume
+7. **Ranking** — Sorts candidates from highest to lowest match score
 
 ---
 
