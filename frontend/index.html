@@ -271,12 +271,13 @@
                     signal: controller.signal
                 });
                 clearTimeout(timeout);
-                const data = await response.json();
-                console.log('API Response:', JSON.stringify(data));
+                const text = await response.text();
+                console.log('Raw response:', text);
+                const data = JSON.parse(text);
                 if (data && data.results) {
                     renderResults(data);
                 } else {
-                    resultsDiv.innerHTML = `<div class="error-box">⚠️ ${JSON.stringify(data)}</div>`;
+                    resultsDiv.innerHTML = `<div class="error-box">⚠️ ${text}</div>`;
                 }
             } catch (error) {
                 if (error.name === 'AbortError') {
