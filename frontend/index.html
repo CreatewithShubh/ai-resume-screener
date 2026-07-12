@@ -319,6 +319,25 @@
                 </div>
                 <div class="card">
                     <div class="chart-title">📊 Score Distribution</div>
+                    <div style="display:flex; justify-content:center; gap:24px; margin-bottom:16px;">
+                        <div style="text-align:center;">
+                            <div style="font-size:28px; font-weight:800; color:#4ade80;">${high}</div>
+                            <div style="font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Strong Match</div>
+                            <div style="font-size:12px; color:#4ade80;">${Math.round(high/data.total_resumes*100)}%</div>
+                        </div>
+                        <div style="width:1px; background:#2d3148;"></div>
+                        <div style="text-align:center;">
+                            <div style="font-size:28px; font-weight:800; color:#fbbf24;">${medium}</div>
+                            <div style="font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Good Match</div>
+                            <div style="font-size:12px; color:#fbbf24;">${Math.round(medium/data.total_resumes*100)}%</div>
+                        </div>
+                        <div style="width:1px; background:#2d3148;"></div>
+                        <div style="text-align:center;">
+                            <div style="font-size:28px; font-weight:800; color:#f87171;">${low}</div>
+                            <div style="font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Low Match</div>
+                            <div style="font-size:12px; color:#f87171;">${Math.round(low/data.total_resumes*100)}%</div>
+                        </div>
+                    </div>
                     <div class="chart-wrapper">
                         <canvas id="scoreChart"></canvas>
                     </div>
