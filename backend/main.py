@@ -38,18 +38,46 @@ async def screen_resumes(
     job_description: str = Form(...),
     resumes: List[UploadFile] = File(...)
 ):
-    # Step 1: Clean the job description
-    cleaned_job_desc = preprocess_text(job_description)
+    try:
+        # Step 1: Clean the job description
+        cleaned_job_desc = preprocess_text(job_description)
 
-    # Step 2: Process each resume
-    processed_resumes = []
-    for resume in resumes:
-        file_bytes = await resume.read()
-        raw_text = extract_text_from_pdf(file_bytes)
-        cleaned_text = preprocess_text(raw_text)
-        
-        # Generate AI summary
-        try:
-            summary = summarize_resume(raw_text)
-        except:
-            summary = "Summary not available."
+        # Step 2: Process each resume
+        processed_resumes = []
+        for resume in resumes:
+            try:
+                file_bytes = await resume.read()
+                raw_text = extract_text_from_pdf(file_bytes)
+                cleaned_text = preprocess_text(raw_text)
+                try:
+                    summary = summarize_resume(raw_text)
+                except:
+                    summary = "Summary not available."
+                processed_resumes.append({
+                    "filename": resume.filename,
+                    "raw_text": raw_text,
+                    "cleaned_text": cleaned_text,
+                    "summary": summary
+                })
+            except Exception as e:
+                processed_resumes.append({
+                    "filename": resume.filename,
+                    "raw_text": "Could not read file.",
+                    "cleaned_text": "",
+                    "summary": "Could not process file."
+                })
+
+        # Step 3: Score all resumes
+        results = score_resumes(cleaned_job_desc, processed_resumes)
+
+        return {
+            "message": "Screening complete!",
+            "total_resumes": len(results),
+            "results": results
+        }
+    except Exception as e:
+        return {
+            "message": f"Error: {str(e)}",
+            "total_resumes": 0,
+            "results": []
+        }
