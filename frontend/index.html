@@ -17,33 +17,26 @@
         .container { max-width: 860px; margin: 0 auto; }
 
         header { text-align: center; margin-bottom: 40px; }
-        header h1 {
-            font-size: 38px; color: #ffffff; font-weight: 800;
-            letter-spacing: -1px;
-        }
+        header h1 { font-size: 38px; color: #ffffff; font-weight: 800; letter-spacing: -1px; }
         header p { color: #64748b; margin-top: 8px; font-size: 15px; }
 
         .card {
-            background: #1a1d27;
-            border: 1px solid #2d3148;
-            border-radius: 20px;
-            padding: 32px; margin-bottom: 24px;
+            background: #1a1d27; border: 1px solid #2d3148;
+            border-radius: 20px; padding: 32px; margin-bottom: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
 
         .section-title {
-            font-weight: 700; display: block;
-            margin-bottom: 10px; color: #94a3b8; font-size: 12px;
+            font-weight: 700; display: block; margin-bottom: 10px;
+            color: #94a3b8; font-size: 12px;
             text-transform: uppercase; letter-spacing: 1px;
         }
 
         textarea {
             width: 100%; height: 140px; padding: 14px;
-            border-radius: 10px;
-            border: 1.5px solid #2d3148;
-            background: #0f1117;
-            font-size: 14px; resize: vertical; font-family: inherit;
-            color: #e2e8f0; transition: border 0.2s;
+            border-radius: 10px; border: 1.5px solid #2d3148;
+            background: #0f1117; font-size: 14px; resize: vertical;
+            font-family: inherit; color: #e2e8f0; transition: border 0.2s;
         }
         textarea:focus { outline: none; border-color: #4f63d2; }
         textarea::placeholder { color: #475569; }
@@ -65,10 +58,9 @@
             color: white; padding: 16px; border: none; border-radius: 12px;
             cursor: pointer; font-size: 16px; font-weight: 700;
             width: 100%; margin-top: 24px; transition: all 0.2s;
-            letter-spacing: 0.3px;
         }
         button.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,99,210,0.5); }
-        button.submit-btn:disabled { background: #2d3148; color: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
+        button.submit-btn:disabled { background: #2d3148; color: #475569; cursor: not-allowed; transform: none; }
 
         #results { margin-top: 10px; }
         .results-header {
@@ -88,11 +80,13 @@
             font-weight: 700; margin-bottom: 16px;
         }
 
+        .chart-wrapper {
+            max-width: 300px; margin: 0 auto;
+        }
+
         .resume-card {
-            background: #1a1d27;
-            border: 1px solid #2d3148;
-            border-radius: 16px;
-            padding: 24px; margin-bottom: 16px;
+            background: #1a1d27; border: 1px solid #2d3148;
+            border-radius: 16px; padding: 24px; margin-bottom: 16px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.3);
             border-left: 4px solid #2d3148;
             animation: fadeIn 0.4s ease;
@@ -114,8 +108,7 @@
         .rank-badge {
             display: inline-flex; align-items: center; justify-content: center;
             width: 32px; height: 32px; border-radius: 50%;
-            background: #2d3148; color: white; font-weight: 800;
-            font-size: 13px;
+            background: #2d3148; color: white; font-weight: 800; font-size: 13px;
         }
         .rank-badge.gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .rank-badge.silver { background: linear-gradient(135deg, #9ca3af, #6b7280); }
@@ -128,13 +121,9 @@
         .score-text.low { color: #f87171; }
 
         .progress-bar-bg {
-            background: #0f1117; border-radius: 8px;
-            height: 8px; overflow: hidden;
+            background: #0f1117; border-radius: 8px; height: 8px; overflow: hidden;
         }
-        .progress-bar-fill {
-            height: 100%; border-radius: 8px;
-            transition: width 0.8s ease;
-        }
+        .progress-bar-fill { height: 100%; border-radius: 8px; transition: width 0.8s ease; }
         .progress-bar-fill.high { background: linear-gradient(90deg, #16a34a, #4ade80); }
         .progress-bar-fill.medium { background: linear-gradient(90deg, #d97706, #fbbf24); }
         .progress-bar-fill.low { background: linear-gradient(90deg, #dc2626, #f87171); }
@@ -173,7 +162,7 @@
             background: #1a1d27; color: #4f63d2;
             border: 1px solid #4f63d2; border-radius: 8px;
             padding: 10px 20px; font-size: 13px; font-weight: 700;
-            cursor: pointer; margin-top: 16px; transition: all 0.2s;
+            cursor: pointer; margin-top: 20px; transition: all 0.2s;
             display: block; width: 100%; text-align: center;
         }
         .download-btn:hover { background: #4f63d2; color: white; }
@@ -232,11 +221,7 @@
         function updateFileList() {
             const files = document.getElementById('resumes').files;
             const fileList = document.getElementById('fileList');
-            if (files.length === 0) {
-                fileList.textContent = '';
-            } else {
-                fileList.textContent = `✅ ${files.length} file(s) selected`;
-            }
+            fileList.textContent = files.length === 0 ? '' : `✅ ${files.length} file(s) selected`;
         }
 
         function getScoreCategory(score) {
@@ -265,9 +250,7 @@
 
             const formData = new FormData();
             formData.append('job_description', jobDesc);
-            for (let resume of resumes) {
-                formData.append('resumes', resume);
-            }
+            for (let resume of resumes) formData.append('resumes', resume);
 
             btn.disabled = true;
             btn.textContent = '⏳ Analyzing...';
@@ -277,16 +260,13 @@
                         <div class="spinner-circle"></div>
                         <p>AI is analyzing your resumes...</p>
                     </div>
-                </div>
-            `;
+                </div>`;
 
             try {
                 const controller = new AbortController();
                 const timeout = setTimeout(() => controller.abort(), 60000);
                 const response = await fetch('https://ai-resume-screener-o0gp.onrender.com/screen', {
-                    method: 'POST',
-                    body: formData,
-                    signal: controller.signal
+                    method: 'POST', body: formData, signal: controller.signal
                 });
                 clearTimeout(timeout);
                 const text = await response.text();
@@ -298,11 +278,9 @@
                     resultsDiv.innerHTML = `<div class="error-box">⚠️ Something went wrong. Please try again!</div>`;
                 }
             } catch (error) {
-                if (error.name === 'AbortError') {
-                    resultsDiv.innerHTML = `<div class="error-box">⏱️ Request timed out. Please try again!</div>`;
-                } else {
-                    resultsDiv.innerHTML = `<div class="error-box">❌ Error: ${error.message}</div>`;
-                }
+                resultsDiv.innerHTML = error.name === 'AbortError'
+                    ? `<div class="error-box">⏱️ Request timed out. Please try again!</div>`
+                    : `<div class="error-box">❌ Error: ${error.message}</div>`;
             }
 
             btn.disabled = false;
@@ -311,8 +289,7 @@
 
         function downloadReport() {
             if (!lastData) return;
-            let text = '🤖 AI RESUME SCREENER REPORT\n';
-            text += '================================\n\n';
+            let text = '🤖 AI RESUME SCREENER REPORT\n================================\n\n';
             lastData.results.forEach((r, i) => {
                 text += `#${i+1} ${r.filename}\n`;
                 text += `Score: ${r.score}%\n`;
@@ -331,17 +308,22 @@
 
         function renderResults(data) {
             const resultsDiv = document.getElementById('results');
+            const high = data.results.filter(r => r.score >= 60).length;
+            const medium = data.results.filter(r => r.score >= 30 && r.score < 60).length;
+            const low = data.results.filter(r => r.score < 30).length;
+
             let html = `
                 <div class="results-header">
                     <h2>🏆 Candidate Rankings</h2>
                     <span>${data.total_resumes} resume(s) analyzed</span>
                 </div>
                 <div class="card">
-                    <div class="chart-title">📊 Score Overview</div>
-                    <canvas id="scoreChart"></canvas>
+                    <div class="chart-title">📊 Score Distribution</div>
+                    <div class="chart-wrapper">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
                     <button class="download-btn" onclick="downloadReport()">📥 Download Report</button>
-                </div>
-            `;
+                </div>`;
 
             data.results.forEach((resume, index) => {
                 const category = getScoreCategory(resume.score);
@@ -363,69 +345,43 @@
                             ${resume.matched_skills && resume.matched_skills.length > 0 ? `
                                 <div class="skill-group">
                                     <div class="skill-group-title matched">✓ Matched Skills</div>
-                                    <div class="badges">
-                                        ${resume.matched_skills.map(s => `<span class="badge matched">${s}</span>`).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
+                                    <div class="badges">${resume.matched_skills.map(s => `<span class="badge matched">${s}</span>`).join('')}</div>
+                                </div>` : ''}
                             ${resume.missing_skills && resume.missing_skills.length > 0 ? `
                                 <div class="skill-group">
                                     <div class="skill-group-title missing">✗ Missing Skills</div>
-                                    <div class="badges">
-                                        ${resume.missing_skills.map(s => `<span class="badge missing">${s}</span>`).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
+                                    <div class="badges">${resume.missing_skills.map(s => `<span class="badge missing">${s}</span>`).join('')}</div>
+                                </div>` : ''}
                         </div>
                         ${resume.summary ? `
                         <div class="summary-box">
                             <span class="summary-label">🤖 AI Summary</span>
                             <p class="summary-text">${resume.summary}</p>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
+                        </div>` : ''}
+                    </div>`;
             });
 
             resultsDiv.innerHTML = html;
 
-            // Draw chart
             setTimeout(() => {
                 const ctx = document.getElementById('scoreChart').getContext('2d');
                 new Chart(ctx, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
-                        labels: data.results.map(r => r.filename.replace('.pdf', '')),
+                        labels: ['Strong Match (60%+)', 'Good Match (30-60%)', 'Low Match (<30%)'],
                         datasets: [{
-                            label: 'Match Score (%)',
-                            data: data.results.map(r => r.score),
-                            backgroundColor: data.results.map(r => {
-                                if (r.score >= 60) return 'rgba(74, 222, 128, 0.8)';
-                                if (r.score >= 30) return 'rgba(251, 191, 36, 0.8)';
-                                return 'rgba(248, 113, 113, 0.8)';
-                            }),
-                            borderColor: data.results.map(r => {
-                                if (r.score >= 60) return '#4ade80';
-                                if (r.score >= 30) return '#fbbf24';
-                                return '#f87171';
-                            }),
+                            data: [high, medium, low],
+                            backgroundColor: ['rgba(74,222,128,0.8)', 'rgba(251,191,36,0.8)', 'rgba(248,113,113,0.8)'],
+                            borderColor: ['#4ade80', '#fbbf24', '#f87171'],
                             borderWidth: 2,
-                            borderRadius: 8,
                         }]
                     },
                     options: {
                         responsive: true,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: { color: '#64748b', callback: v => v + '%' },
-                                grid: { color: '#2d3148' }
-                            },
-                            x: {
-                                ticks: { color: '#64748b' },
-                                grid: { color: '#2d3148' }
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#94a3b8', padding: 20 }
                             }
                         }
                     }
