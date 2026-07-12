@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Screener</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -79,6 +80,12 @@
             color: #64748b; font-size: 13px;
             background: #1a1d27; border: 1px solid #2d3148;
             padding: 4px 12px; border-radius: 20px;
+        }
+
+        .chart-title {
+            font-size: 13px; color: #64748b;
+            text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 700; margin-bottom: 16px;
         }
 
         .resume-card {
@@ -162,6 +169,15 @@
         }
         .summary-text { font-size: 13px; color: #94a3b8; line-height: 1.7; }
 
+        .download-btn {
+            background: #1a1d27; color: #4f63d2;
+            border: 1px solid #4f63d2; border-radius: 8px;
+            padding: 10px 20px; font-size: 13px; font-weight: 700;
+            cursor: pointer; margin-top: 16px; transition: all 0.2s;
+            display: block; width: 100%; text-align: center;
+        }
+        .download-btn:hover { background: #4f63d2; color: white; }
+
         .spinner {
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
@@ -211,6 +227,8 @@
     </div>
 
     <script>
+        let lastData = null;
+
         function updateFileList() {
             const files = document.getElementById('resumes').files;
             const fileList = document.getElementById('fileList');
@@ -272,12 +290,12 @@
                 });
                 clearTimeout(timeout);
                 const text = await response.text();
-                console.log('Raw response:', text);
                 const data = JSON.parse(text);
                 if (data && data.results) {
+                    lastData = data;
                     renderResults(data);
                 } else {
-                    resultsDiv.innerHTML = `<div class="error-box">⚠️ ${text}</div>`;
+                    resultsDiv.innerHTML = `<div class="error-box">⚠️ Something went wrong. Please try again!</div>`;
                 }
             } catch (error) {
                 if (error.name === 'AbortError') {
@@ -291,12 +309,37 @@
             btn.textContent = '⚡ Screen Resumes';
         }
 
+        function downloadReport() {
+            if (!lastData) return;
+            let text = '🤖 AI RESUME SCREENER REPORT\n';
+            text += '================================\n\n';
+            lastData.results.forEach((r, i) => {
+                text += `#${i+1} ${r.filename}\n`;
+                text += `Score: ${r.score}%\n`;
+                text += `Matched Skills: ${r.matched_skills.join(', ')}\n`;
+                text += `Missing Skills: ${r.missing_skills.join(', ')}\n`;
+                text += `Summary: ${r.summary}\n`;
+                text += '--------------------------------\n\n';
+            });
+            const blob = new Blob([text], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'screening-report.txt';
+            a.click();
+        }
+
         function renderResults(data) {
             const resultsDiv = document.getElementById('results');
             let html = `
                 <div class="results-header">
                     <h2>🏆 Candidate Rankings</h2>
                     <span>${data.total_resumes} resume(s) analyzed</span>
+                </div>
+                <div class="card">
+                    <div class="chart-title">📊 Score Overview</div>
+                    <canvas id="scoreChart"></canvas>
+                    <button class="download-btn" onclick="downloadReport()">📥 Download Report</button>
                 </div>
             `;
 
@@ -345,6 +388,49 @@
             });
 
             resultsDiv.innerHTML = html;
+
+            // Draw chart
+            setTimeout(() => {
+                const ctx = document.getElementById('scoreChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.results.map(r => r.filename.replace('.pdf', '')),
+                        datasets: [{
+                            label: 'Match Score (%)',
+                            data: data.results.map(r => r.score),
+                            backgroundColor: data.results.map(r => {
+                                if (r.score >= 60) return 'rgba(74, 222, 128, 0.8)';
+                                if (r.score >= 30) return 'rgba(251, 191, 36, 0.8)';
+                                return 'rgba(248, 113, 113, 0.8)';
+                            }),
+                            borderColor: data.results.map(r => {
+                                if (r.score >= 60) return '#4ade80';
+                                if (r.score >= 30) return '#fbbf24';
+                                return '#f87171';
+                            }),
+                            borderWidth: 2,
+                            borderRadius: 8,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { color: '#64748b', callback: v => v + '%' },
+                                grid: { color: '#2d3148' }
+                            },
+                            x: {
+                                ticks: { color: '#64748b' },
+                                grid: { color: '#2d3148' }
+                            }
+                        }
+                    }
+                });
+            }, 100);
         }
     </script>
 </body>
