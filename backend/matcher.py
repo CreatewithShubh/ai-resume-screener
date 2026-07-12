@@ -48,7 +48,14 @@ def score_resumes(job_description: str, resumes: list) -> list:
 
     results = []
     for i, resume in enumerate(resumes):
-        score = round(float(similarities[i]) * 100, 2)
+        # Base TF-IDF score
+        base_score = float(similarities[i]) * 100
+        
+        # Skill match boost — more matched skills = higher score
+        skill_boost = len(job_skills & resume_skills) * 5
+        
+        # Final score capped at 100
+        score = round(min(base_score + skill_boost, 100), 2)
 
         # Find skills in this resume
         resume_skills = set(find_skills(resume['cleaned_text']))
