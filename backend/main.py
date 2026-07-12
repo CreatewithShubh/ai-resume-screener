@@ -76,6 +76,8 @@ async def screen_resumes(
             "results": results
         }
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         return {
             "message": f"Error: {str(e)}",
             "total_resumes": 0,

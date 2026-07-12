@@ -2,7 +2,6 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# A list of common skills we'll look for in resumes and job descriptions
 COMMON_SKILLS = [
     "python", "java", "javascript", "typescript", "sql", "nosql", "mongodb",
     "react", "angular", "vue", "node", "express", "django", "flask", "fastapi",
@@ -15,9 +14,6 @@ COMMON_SKILLS = [
 ]
 
 def find_skills(text: str) -> list:
-    """
-    Checks which skills from our list appear in the given text.
-    """
     found = []
     for skill in COMMON_SKILLS:
         skill_cleaned = skill.replace(" ", "")
@@ -27,10 +23,6 @@ def find_skills(text: str) -> list:
     return found
 
 def score_resumes(job_description: str, resumes: list) -> list:
-    """
-    Compares each resume against the job description.
-    Returns a score from 0 to 100, plus matched/missing skills.
-    """
     all_texts = [job_description] + [r['cleaned_text'] for r in resumes]
 
     vectorizer = TfidfVectorizer()
@@ -41,27 +33,24 @@ def score_resumes(job_description: str, resumes: list) -> list:
 
     similarities = cosine_similarity(job_vector, resume_vectors)[0]
 
-    # Find skills mentioned in the job description
-    job_skills = set(find_skills(job_description))
+    # Find skills in job description (raw lowercase)
+    job_skills = set(find_skills(job_description.lower()))
 
     results = []
     for i, resume in enumerate(resumes):
-        # Find skills in this resume FIRST
-        resume_skills = set(find_skills(resume['cleaned_text']))
+        # Find skills in resume (both cleaned and raw text)
+        resume_skills = set(find_skills(resume['cleaned_text'])) | set(find_skills(resume['raw_text'].lower()))
 
         # Base TF-IDF score
         base_score = float(similarities[i]) * 100
 
-        # Skill match boost — more matched skills = higher score
+        # Skill match boost
         skill_boost = len(job_skills & resume_skills) * 5
 
         # Final score capped at 100
         score = round(min(base_score + skill_boost, 100), 2)
 
-        # Matched = skills in BOTH job description and resume
         matched_skills = list(job_skills & resume_skills)
-
-        # Missing = skills in job description but NOT in resume
         missing_skills = list(job_skills - resume_skills)
 
         results.append({
