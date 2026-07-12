@@ -17,11 +17,9 @@ COMMON_SKILLS = [
 def find_skills(text: str) -> list:
     """
     Checks which skills from our list appear in the given text.
-    text is already cleaned/lowercased.
     """
     found = []
     for skill in COMMON_SKILLS:
-        # Check if the skill (or its cleaned version) appears in the text
         skill_cleaned = skill.replace(" ", "")
         text_cleaned = text.replace(" ", "")
         if skill_cleaned in text_cleaned:
@@ -48,20 +46,21 @@ def score_resumes(job_description: str, resumes: list) -> list:
 
     results = []
     for i, resume in enumerate(resumes):
+        # Find skills in this resume FIRST
+        resume_skills = set(find_skills(resume['cleaned_text']))
+
         # Base TF-IDF score
         base_score = float(similarities[i]) * 100
-        
+
         # Skill match boost — more matched skills = higher score
         skill_boost = len(job_skills & resume_skills) * 5
-        
+
         # Final score capped at 100
         score = round(min(base_score + skill_boost, 100), 2)
 
-        # Find skills in this resume
-        resume_skills = set(find_skills(resume['cleaned_text']))
-
         # Matched = skills in BOTH job description and resume
         matched_skills = list(job_skills & resume_skills)
+
         # Missing = skills in job description but NOT in resume
         missing_skills = list(job_skills - resume_skills)
 
